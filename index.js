@@ -10,10 +10,18 @@ const app = express()
 
 //dog profile variables
 const dogProfiles = []
+const chProfiles = []
+const aarcsProfiles = []
+const pawsProfiles = []
+
 var dogName = ''
 var dogPic = ''
 var dogURL = ''
-var count = 0
+
+var ID = 0
+var chID = 0
+var pawsID = 0
+var aarcsID = 0
 
 //shelters to look through
 const shelters = [
@@ -32,9 +40,30 @@ const shelters = [
 ]
 
 //home page routing 
-app.get('/',(req, res) => {
-    res.json('Welcome to my shelter API!')
+app.get('/', (req, res) => {
+    res.send('Welcome to my shelter API! <br/> /dogs for all dogs in calgary area <br/> <br/> For specific shelters use:<br/>/aarcs<br/>/pawsitive<br/>/calgaryhumane')
 })
+
+//dogs routing
+app.get('/dogs',(req,res) => {
+    res.json(dogProfiles)
+})
+
+//aarcs dogs only
+app.get('/aarcs',(req,res) => {
+    res.json(aarcsProfiles)
+})
+
+//paws dogs only
+app.get('/pawsitive',(req,res) => {
+    res.json(pawsProfiles)
+})
+
+//calgary humane dogs only 
+app.get('/calgaryhumane',(req,res) => {
+    res.json(chProfiles)
+})
+
 
 //looping through all shelters
 shelters.forEach(shelter => {
@@ -53,13 +82,20 @@ shelters.forEach(shelter => {
                                             
                     if (dogName != ''){
                         const splitURL = dogURL.split("('")
-                        count ++
+                        ID ++
+                        chID ++
 
                         dogProfiles.push({
                             dogName,
                             dogURL: 'http://ws.petango.com/webservices/adoptablesearch/' + splitURL[1],
                             dogPic,
-                            count
+                            ID
+                        })
+                        chProfiles.push({
+                            dogName,
+                            dogURL: 'http://ws.petango.com/webservices/adoptablesearch/' + splitURL[1],
+                            dogPic,
+                            chID
                         })
                     }
 
@@ -71,16 +107,24 @@ shelters.forEach(shelter => {
                     dogURL = $(this).attr('href')
                     dogPic = $(this).find('img').attr('src')
                     
-                    count ++
+                    ID ++
+                    aarcsID ++
                     
                     dogProfiles.push({
                         dogName,
                         dogURL,
                         dogPic,
-                        count
+                        ID
+                    })
+                    aarcsProfiles.push({
+                        dogName,
+                        dogURL,
+                        dogPic,
+                        aarcsID
                     })
                 })
                 dogProfiles.length = dogProfiles.length - 3
+                aarcsProfiles.length = aarcsProfiles.length - 3
             }
             else //pawsitive
                 $('td a, a.post',html).each(function() {
@@ -88,23 +132,26 @@ shelters.forEach(shelter => {
                     dogURL = $(this).attr('href')
                     dogPic = $(this).find('img').attr('src')
                     
-                    count ++
+                    ID ++
+                    pawsID ++
                     
                     dogProfiles.push({
                         dogName,
                         dogURL,
                         dogPic,
-                        count
+                        ID
+                    })
+                    pawsProfiles.push({
+                        dogName,
+                        dogURL,
+                        dogPic,
+                        pawsID
                     })
                 })
 
             // dogProfiles.length = dogProfiles.length - 3
             
         }).catch((err) => console.log(err))
-})
-
-app.get('/dogs',(req,res) => {
-    res.json(dogProfiles)
 })
 
 //Listening for any changes on port 8000
