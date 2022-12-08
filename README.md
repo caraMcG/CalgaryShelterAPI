@@ -19,3 +19,10 @@ lists all of the below:
 /pawsitive
 /calgaryhumane
 
+
+#Returned Variables
+- dogName: String value of the dogs name
+- dogURL: String value of the URL to the specific adoptable dogs page
+- dogPic: String value of the URL to the specific dogs image
+- ID: int value, placement of the dog in the returned list
+
