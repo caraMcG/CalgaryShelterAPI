@@ -89,6 +89,7 @@ shelters.forEach(shelter => {
                             dogName,
                             dogURL: 'http://ws.petango.com/webservices/adoptablesearch/' + splitURL[1],
                             dogPic,
+                            // <img src={dogPic}/>,
                             ID
                         })
                         chProfiles.push({
