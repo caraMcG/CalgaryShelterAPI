@@ -154,7 +154,6 @@ shelters.forEach(shelter => {
                     })
                 })
 
-            dogProfiles.length = dogProfiles.length - 3
             
         }).catch((err) => console.log(`${shelter.name} has error`, err.response.status))
 })
