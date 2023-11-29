@@ -41,7 +41,7 @@ const shelters = [
 
 //home page routing 
 app.get('/', (req, res) => {
-    res.send('Welcome to my shelter API!! <br/> /dogs for all dogs in calgary area <br/> <br/> For specific shelters use:<br/>/aarcs<br/>/pawsitive<br/>/calgaryhumane <br/><br/><br/>Updated as of:  2023-11-28')
+    res.send('Welcome to my shelter API!! <br/> /dogs for all dogs in calgary area <br/> <br/> For specific shelters use:<br/>/aarcs<br/>/pawsitive<br/>/calgaryhumane <br/><br/>')
 })
 
 //dogs routing
