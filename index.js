@@ -13,18 +13,11 @@ app.use(cors())
 
 //dog profile variables
 const dogProfiles = []
-const chProfiles = []
-const aarcsProfiles = []
-const pawsProfiles = []
 
 var dogName = ''
 var dogPic = ''
 var dogURL = ''
-
-var ID = 0
-var chID = 0
-var pawsID = 0
-var aarcsID = 0
+var shelterName = ''
 
 //shelters to look through
 const shelters = [
@@ -54,17 +47,17 @@ app.get('/dogs',(req,res) => {
 
 //aarcs dogs only
 app.get('/aarcs',(req,res) => {
-    res.json(aarcsProfiles)
+    res.json(dogProfiles.filter((profile) => profile.shelterName.includes("aarcs")))
 })
 
 //paws dogs only
 app.get('/pawsitive',(req,res) => {
-    res.json(pawsProfiles)
+    res.json(dogProfiles.filter((profile) => profile.shelterName.includes("pawsitive")))
 })
 
 //calgary humane dogs only 
 app.get('/calgaryhumane',(req,res) => {
-    res.json(chProfiles)
+    res.json(dogProfiles.filter((profile) => profile.shelterName.includes("calgaryhumane")))
 })
 
 
@@ -82,23 +75,16 @@ shelters.forEach(shelter => {
                     dogName = $(this).find('[class$=name]').text()
                     dogURL = $(this).find('a').attr('href')
                     dogPic = $(this).find('.list-animal-photo').attr('src')
-                                            
+                    shelterName = 'calgaryhumane' 
+                    
                     if (dogName != ''){
                         const splitURL = dogURL.split("('")
-                        ID ++
-                        chID ++
-
+                    
                         dogProfiles.push({
                             dogName,
                             dogURL: 'http://ws.petango.com/webservices/adoptablesearch/' + splitURL[1],
                             dogPic,
-                            ID
-                        })
-                        chProfiles.push({
-                            dogName,
-                            dogURL: 'http://ws.petango.com/webservices/adoptablesearch/' + splitURL[1],
-                            dogPic,
-                            chID
+                            shelterName
                         })
                     }
 
@@ -110,8 +96,7 @@ shelters.forEach(shelter => {
                     dogName = $(this).find('[class$=name]').text()
                     dogURL = $(this).attr('href')
                     dogPic = $(this).find('img').attr('src')
-                    ID ++
-                    aarcsID ++
+                    shelterName = 'aarcs'
                     
                     ///Checking for 'wags-wish' pictures and selecting correct image of dog
                     if (dogPic.includes('wags-wish-icon.png')){
@@ -122,42 +107,27 @@ shelters.forEach(shelter => {
                         dogName,
                         dogURL,
                         dogPic,
-                        ID
+                        shelterName
                     })
-                    aarcsProfiles.push({
-                        dogName,
-                        dogURL,
-                        dogPic,
-                        aarcsID
-                    })
+                   
                 })
                 dogProfiles.length = dogProfiles.length - 3
-                aarcsProfiles.length = aarcsProfiles.length - 3
             }
             else //pawsitive
                 $('td a, a.post',html).each(function() {
                     dogName = $(this).find('[class$=name]').text()
                     dogURL = $(this).attr('href')
                     dogPic = $(this).find('img').attr('src')
-                    
-                    ID ++
-                    pawsID ++
+                    shelterName = 'pawsitive'
                     
                     dogProfiles.push({
                         dogName,
                         dogURL,
                         dogPic,
-                        ID
-                    })
-                    pawsProfiles.push({
-                        dogName,
-                        dogURL,
-                        dogPic,
-                        pawsID
+                        shelterName
                     })
                 })
-
-            
+              
         }).catch((err) => console.log(`${shelter.name} has error`, err.response.status))
 })
 
