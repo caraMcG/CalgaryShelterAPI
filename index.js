@@ -28,7 +28,8 @@ const shelters = [
     {
         name: 'calgaryhumane',
         address: 'http://ws.petango.com/webservices/adoptablesearch/wsAdoptableAnimals.aspx?species=Dog&sex=A&agegroup=All&location=&site=&onhold=A&orderby=ID&colnum=3&css=https://www.calgaryhumane.ca/wp-content/themes/blackbaud-bootstrap-calgary-humane-society/petango.css&authkey=4amspyroh0oj2b0cjmc3fi430ec5l7xmn8ckj1scncjgbl5tdp&recAmount=&detailsInPopup=Yes&featuredPet=Include&stageID='
-    },
+    }
+    ,
     {
         name: 'pawsitive',
         address:'https://pawsitivematch.org/adoptabledogs/'
@@ -45,7 +46,7 @@ app.get('/dogs',(req,res) => {
     res.json(dogProfiles)
 })
 
-//aarcs dogs only
+// aarcs dogs only
 app.get('/aarcs',(req,res) => {
     res.json(dogProfiles.filter((profile) => profile.shelterName.includes("aarcs")))
 })
@@ -73,16 +74,15 @@ shelters.forEach(shelter => {
                 $('.list-item',html).each(function() {
                     
                     dogName = $(this).find('[class$=name]').text()
-                    dogURL = $(this).find('a').attr('href')
+                    dogURL = 'https://www.calgaryhumane.ca/animals/animal-listings/dog-listings/?id=' + $(this).find('[class$=id]').text()
                     dogPic = $(this).find('.list-animal-photo').attr('src')
                     shelterName = 'calgaryhumane' 
-                    
+
                     if (dogName != ''){
-                        const splitURL = dogURL.split("('")
                     
                         dogProfiles.push({
                             dogName,
-                            dogURL: 'http://ws.petango.com/webservices/adoptablesearch/' + splitURL[1],
+                            dogURL,
                             dogPic,
                             shelterName
                         })
