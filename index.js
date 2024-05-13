@@ -68,7 +68,6 @@ shelters.forEach(shelter => {
         .then((response) => {
             const html = response.data
             const $ = cheerio.load(html)
-            console.log(shelter.name)
             if(shelter.name == 'calgaryhumane'){
                 
                 $('.list-item',html).each(function() {
@@ -89,6 +88,7 @@ shelters.forEach(shelter => {
                     }
 
                 })
+                console.log(shelter.name, response.status);
             }
             else if(shelter.name == 'aarcs'){
                 $('td a, a.post',html).each(function() {
@@ -112,8 +112,9 @@ shelters.forEach(shelter => {
                    
                 })
                 dogProfiles.length = dogProfiles.length - 3
+                console.log(shelter.name, response.status);
             }
-            else //pawsitive
+            else if(shelter.name == 'pawsitive'){
                 $('td a, a.post',html).each(function() {
                     dogName = $(this).find('[class$=name]').text()
                     dogURL = $(this).attr('href')
@@ -127,8 +128,13 @@ shelters.forEach(shelter => {
                         shelterName
                     })
                 })
+                console.log(shelter.name, response.status);
+            }
+            else //none
+                console.log(shelter.name)
+            
               
-        }).catch((err) => console.log(`${shelter.name} has error`, err.response.status))
+        }).catch((err) => console.log(`${shelter.name} has error`, err.code))
 })
 
 //Listening for any changes on port 8000
