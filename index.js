@@ -27,12 +27,12 @@ const shelters = [
     },
     {
         name: 'calgaryhumane',
-        address: 'http://ws.petango.com/webservices/adoptablesearch/wsAdoptableAnimals.aspx?species=Dog&sex=A&agegroup=All&location=&site=&onhold=A&orderby=ID&colnum=3&css=https://www.calgaryhumane.ca/wp-content/themes/blackbaud-bootstrap-calgary-humane-society/petango.css&authkey=4amspyroh0oj2b0cjmc3fi430ec5l7xmn8ckj1scncjgbl5tdp&recAmount=&detailsInPopup=Yes&featuredPet=Include&stageID='
+        address: 'https://ws.petango.com/webservices/adoptablesearch/wsAdoptableAnimals.aspx?species=Dog&sex=A&agegroup=All&location=&site=&onhold=A&orderby=ID&colnum=3&css=https://www.calgaryhumane.ca/wp-content/themes/blackbaud-bootstrap-calgary-humane-society/petango.css&authkey=4amspyroh0oj2b0cjmc3fi430ec5l7xmn8ckj1scncjgbl5tdp&recAmount=&detailsInPopup=Yes&featuredPet=Include&stageID='
     }
     ,
     {
         name: 'pawsitive',
-        address:'https://pawsitivematch.org/adoptabledogs/'
+        address: 'https://pawsitivematch.org/adoptabledogs/'
     }
 ]
 
@@ -48,17 +48,23 @@ app.get('/dogs',(req,res) => {
 
 // aarcs dogs only
 app.get('/aarcs',(req,res) => {
+
     res.json(dogProfiles.filter((profile) => profile.shelterName.includes("aarcs")))
+
 })
 
 //paws dogs only
 app.get('/pawsitive',(req,res) => {
+
     res.json(dogProfiles.filter((profile) => profile.shelterName.includes("pawsitive")))
+    
 })
 
 //calgary humane dogs only 
 app.get('/calgaryhumane',(req,res) => {
+
     res.json(dogProfiles.filter((profile) => profile.shelterName.includes("calgaryhumane")))
+
 })
 
 
@@ -68,12 +74,15 @@ shelters.forEach(shelter => {
         .then((response) => {
             const html = response.data
             const $ = cheerio.load(html)
+
+            console.log(shelter.name, response.status);
+
             if(shelter.name == 'calgaryhumane'){
                 
                 $('.list-item',html).each(function() {
                     
                     dogName = $(this).find('[class$=name]').text()
-                    dogURL = 'https://www.calgaryhumane.ca/animals/animal-listings/dog-listings/?id=' + $(this).find('[class$=id]').text()
+                    dogURL = 'https://www.calgaryhumane.ca/adopt/dogs/?id=' + $(this).find('[class$=id]').text()
                     dogPic = $(this).find('.list-animal-photo').attr('src')
                     shelterName = 'calgaryhumane' 
 
@@ -88,7 +97,6 @@ shelters.forEach(shelter => {
                     }
 
                 })
-                console.log(shelter.name, response.status);
             }
             else if(shelter.name == 'aarcs'){
                 $('td a, a.post',html).each(function() {
@@ -112,7 +120,6 @@ shelters.forEach(shelter => {
                    
                 })
                 dogProfiles.length = dogProfiles.length - 3
-                console.log(shelter.name, response.status);
             }
             else if(shelter.name == 'pawsitive'){
                 $('td a, a.post',html).each(function() {
@@ -128,13 +135,14 @@ shelters.forEach(shelter => {
                         shelterName
                     })
                 })
-                console.log(shelter.name, response.status);
+             
             }
             else //none
                 console.log(shelter.name)
             
               
-        }).catch((err) => console.log(`${shelter.name} has error`, err.code))
+        }).catch((err) => 
+            console.log(`${shelter.name} has error`, err.code))
 })
 
 //Listening for any changes on port 8000
